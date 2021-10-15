@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bootstrap Site</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css"
+        integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I" crossorigin="anonymous">
+</head>
+
+<body>
+    <!--  -->
+
+    <div class="container">
+        <div id="r1"></div>
+        <button class="btn btn-success" data-bs-target="#income" data-bs-toggle="modal">Add Income</button>
+        <button class="btn btn-success" data-bs-target="#expance" data-bs-toggle="modal">Add expance</button>
+
+        <div id="output"></div>
+    </div>
+
+
+    <div class="modal fade" id="income" data-backdrop="static" data-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdrop" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">income</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="text" class="form-control" id="iamount" value="50000">
+                    <textarea name="" class="form-control" id="idesc" cols="30" rows="10">Salary</textarea>
+                    <button class="btn btn-success" onclick="moneytracker('income')">Add income</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="expance" data-backdrop="static" data-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdrop" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">expance</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="text" class="form-control" id="eamount">
+                    <textarea name="" class="form-control" id="edesc" cols="30" rows="10">expense</textarea>
+                    <button class="btn btn-success" onclick="moneytracker('expance')">Add expense</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
+        crossorigin="anonymous"></script>
+
+
+    <script>
+        // var iamout = 0;
+        // var idesc;
+        // var eamount = 0;
+        // var edesc;
+        // var incomeArray = [];
+        // var expanceArray = [];
+        var data = [];
+        var amountid;
+        var descid;
+
+        function moneytracker(arg) {
+            // console.log(arg);
+            if (arg == "income") {
+                amountid = "iamount"
+                descid = "idesc"
+            } else {
+                amountid = "eamount"
+                descid = "edesc"
+            }
+            data.push({
+                type: arg,
+                amount: document.getElementById(amountid).value,
+                desc: document.getElementById(descid).value
+            }
+            );
+
+            // local storage start
+
+            if (localStorage.getItem("money") == null) {
+                //key nahi
+                var arr = JSON.stringify(data);
+                localStorage.setItem("money", arr);
+
+
+
+            } else {
+                //key ahe
+                console.log("concate kara");
+            }
+            // local storage end
+            console.log(data);
+            displaydata();
+        }
+
+        function displaydata() {
+            var totalincome = 0;
+            var totalexpense = 0;
+            var balance = 0;
+
+            document.getElementById("output").innerHTML = "";
+            for (var i = 0; i < data.length; i++) {
+
+                if (data[i].type == "income") {
+                    totalincome += +data[i].amount;
+                }
+
+                if (data[i].type == "expance") {
+                    totalexpense += +data[i].amount;
+                }
+
+
+                var myclass = data[i].type == "income" ? "alert-success" : "alert-danger"
+                document.getElementById("output").innerHTML +=
+                    `<div class="alert ${myclass}">${data[i].desc} ${data[i].amount}</div>`
+            }
+
+            console.log(totalincome);
+            console.log(totalexpense);
+
+            console.log(`balance = ${totalincome - totalexpense}`);
+
+            document.getElementById("r1").innerHTML = `<div class="alert alert-dark">balance = ${totalincome - totalexpense}</div>`
+
+        }
+        // function addIncome() {
+        // iamout = document.getElementById("iamount").value;
+        // idesc = document.getElementById("idesc").value;
+        // var obj = {
+        //     type: "income",
+        //     amount: iamount,
+        //     desc: edesc
+        // }
+        // data.push(obj);
+
+        // data.push(
+        //     {
+        //         type: "income",
+        //         amount: document.getElementById("iamount").value,
+        //         desc: document.getElementById("idesc").value
+        //     }
+        // );
+        // console.log(data);
+
+        // function addExpance() {
+        //     eamount = document.getElementById("eamount").value;
+        //     edesc = document.getElementById("edesc").value;
+
+        //     var obj = {
+        //         type: "expance",
+        //         amount: eamount,
+        //         desc: edesc
+        //     }
+        //     data.push(obj);
+        //     console.log(data);
+        // }
+
+        // function displayData() {
+
+        // }
+    </script>
+</body>
